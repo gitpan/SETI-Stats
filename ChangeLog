@@ -1,0 +1,9 @@
+1999-07-29  Martin Hamilton  <martin@not-invented-here.lut.ac.uk>
+
+	* Folded in patches from Andrea Whitlock for running on NT
+	and setting the status message properly
+
+1999-07-13  Martin Hamilton  <martin@uk.gnu.org>
+
+	* Packaged up for first public test release
+
