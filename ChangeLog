@@ -1,3 +1,8 @@
+1999-08-06  Martin Hamilton  <martin@not-invented-here.lut.ac.uk>
+
+	* Put out 1.05, which adds " ... " wrappers around the
+	cat command used to remotely read files - needed for NT
+
 1999-08-04  Martin Hamilton  <martin@not-invented-here.lut.ac.uk>
 
 	* Put out 1.04, which now properly sets the $x hash array

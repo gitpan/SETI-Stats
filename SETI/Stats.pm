@@ -1,12 +1,12 @@
 # SETI::Stats - after perlseti.pl by Jan Rocho
 # See below for author, copyright, &c.
-# $Id: Stats.pm,v 1.7 1999/08/04 11:51:34 martin Exp $
+# $Id: Stats.pm,v 1.8 1999/08/06 17:01:33 martin Exp $
 
 package SETI::Stats;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "1.04";
+$VERSION = "1.05";
 
 
 sub new {
@@ -70,7 +70,7 @@ sub poll {
     # rsh/ssh/... over to another machine to snarf the stats if needed
     if ($self->{host} && !$args{checkpoint}) {
 	return undef unless
-	    open(IN, "$self->{rsh} $self->{host} cat $filename 2>/dev/null|");
+	  open(IN, "$self->{rsh} $self->{host} \"cat $filename 2>/dev/null\"|");
     } else {
 	# ...or just open a local file
 	return undef unless open(IN, "$filename");
