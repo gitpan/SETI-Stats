@@ -1,3 +1,8 @@
+1999-08-04  Martin Hamilton  <martin@not-invented-here.lut.ac.uk>
+
+	* Put out 1.04, which now properly sets the $x hash array
+	which is used to generate new perlseti_data state files
+
 1999-07-29  Martin Hamilton  <martin@not-invented-here.lut.ac.uk>
 
 	* Folded in patches from Andrea Whitlock for running on NT

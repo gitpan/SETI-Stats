@@ -1,12 +1,12 @@
 # SETI::Stats - after perlseti.pl by Jan Rocho
 # See below for author, copyright, &c.
-# $Id: Stats.pm,v 1.6 1999/07/29 09:08:08 martin Exp $
+# $Id: Stats.pm,v 1.7 1999/08/04 11:51:34 martin Exp $
 
 package SETI::Stats;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "1.03";
+$VERSION = "1.04";
 
 
 sub new {
@@ -139,6 +139,16 @@ sub checkpoint {
     $self->populate(section => "perlseti_data", results => \@results);
 
     $changed = 0; # default is that we don't need to update perlseti_data
+
+    # $x is the info we'd write to our state file...
+    $x{bestspike_power} = $self->perlseti_data("bestspike_power");
+    $x{bestspike_score} = $self->perlseti_data("bestspike_score");
+    $x{bestspike_ra} = $self->perlseti_data("bestspike_ra");
+    $x{bestspike_dec} = $self->perlseti_data("bestspike_dec");
+    $x{bestgaussian_power} = $self->perlseti_data("bestgaussian_power");
+    $x{bestgaussian_score} = $self->perlseti_data("bestgaussian_score");
+    $x{bestgaussian_ra} = $self->perlseti_data("bestgaussian_ra");
+    $x{bestgaussian_dec} = $self->perlseti_data("bestgaussian_dec");
 
     if ($self->state("bs_power") > $self->perlseti_data("bestspike_power")) {
 	$x{bestspike_power} = $self->state("bs_power");
