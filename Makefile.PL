@@ -1,7 +1,7 @@
-# $Id: Makefile.PL,v 1.6 1999/08/06 17:03:55 martin Exp $
+# $Id: Makefile.PL,v 1.7 2001/09/05 09:11:11 martin Exp $
 
 $DISTNAME = 'SETI-Stats';
-$VERSION  = "1.05";
+$VERSION  = "1.06";
 
 use ExtUtils::MakeMaker;
 

@@ -1,12 +1,12 @@
 # SETI::Stats - after perlseti.pl by Jan Rocho
 # See below for author, copyright, &c.
-# $Id: Stats.pm,v 1.8 1999/08/06 17:01:33 martin Exp $
+# $Id: Stats.pm,v 1.9 2001/09/05 09:10:44 martin Exp $
 
 package SETI::Stats;
 use strict;
 use vars qw($VERSION);
 
-$VERSION = "1.05";
+$VERSION = "1.06";
 
 
 sub new {
@@ -20,7 +20,7 @@ sub new {
 
     @{$self->{messages}} = (
 	"Analyzing the work unit data ...\n",
-	"Your \"state.txt\" file is currently being updated.\n",
+	"Your \"state.sah\" file is currently being updated.\n",
 	"Downloading new work unit ...\n",
 	"Your user information is being updated ...\n",
 	"Can't open the high-score data file for reading ...\n",
@@ -45,16 +45,19 @@ sub poll {
     my ($self, %args) = @_;
     my (@results) = ();
     my $okclearmessage;
+    my $foundfile;
     my ($filename) = $args{file};
+
+    $foundfile = 0;
 
     # set message to appropriate error
     if ($self->{message} eq 0) {
         $okclearmessage = 1;
-        if ($filename eq 'state.txt') {
+        if ($filename eq 'state.sah') {
             $self->{message} = 1;
-        } elsif ($filename eq 'work_unit.txt') {
+        } elsif ($filename eq 'work_unit.sah' || $filename eq 'result_header.sah') {
             $self->{message} = 2;
-        } elsif ($filename eq 'user_info.txt') {
+        } elsif ($filename eq 'user_info.sah') {
             $self->{message} = 3;
         } else {
             $self->{message} = 4;
@@ -76,12 +79,15 @@ sub poll {
 	return undef unless open(IN, "$filename");
     }
 
-    # clear error message
-    $self->{message} = 0 if ($okclearmessage);
-
     # end_seti_header is a special case in work units
-    while(<IN>) { chop; last if /^end_seti_header/; push(@results, $_); }
+    while(<IN>) { 
+        $foundfile = 1; chop; last if /^end_seti_header/; push(@results, $_); 
+    }
     close(IN);
+
+    # clear error message
+    $self->{message} = 0 if ($okclearmessage && $foundfile);
+
     return @results;
 }
 
@@ -97,7 +103,8 @@ sub populate {
     foreach (@{$args{results}}) {
 	s/=\s+/=/;
 	($l,$r) = split(/=/);
-	$self->{$args{section}}{$l} = $r || ""; # default should be undef?
+	#$self->{$args{section}}{$l} = $r || ""; # default should be undef?
+	$self->{$args{section}}{$l} = $r;
     }
 }
 
@@ -107,7 +114,10 @@ sub checkpoint {
     my ($host) = ($self->{host} ? "_$self->{host}" : "");
     my (%x, @results, $changed, $okclearmessage);
 
-    unless (-f "$self->{save}$host.txt") {
+    # changed -f to -s so we will work with 0 byte bestscore data files
+    # when trying to write out a (true) best score (like gaussian power)
+    # of 0.   agw 06/22/00
+    unless (-s "$self->{save}$host.txt") {
         if ($self->{message} eq 0) {
             $okclearmessage = 1;
             $self->{message} = 5;
@@ -203,7 +213,7 @@ sub visit {
 
     foreach $section ("result_header", "state", "user_info",
 					"version", "work_unit") {
-	@results = $self->poll(file => "$section.txt");
+	@results = $self->poll(file => "$section.sah");
 	$self->populate(section => $section, results => \@results);
     }
     $self->checkpoint;
@@ -401,7 +411,7 @@ by the B<visit> method when updating the local checkpoint file.
 =item section
 
 This is the section name to poll for, corresponding to the file
-I<section>.txt in the SETI@home working directory on the client machine.
+I<section>.sah in the SETI@home working directory on the client machine.
 
 =back
 

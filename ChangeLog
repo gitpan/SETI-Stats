@@ -1,3 +1,8 @@
+2001-08-24  Andrea Whitlock  <whitlock@mobius-soft.com>
+
+	* Put out 1.06, which adds the patches for HTMLPerlSETI
+	(mainly .txt <-> .sah changes)
+
 1999-08-06  Martin Hamilton  <martin@not-invented-here.lut.ac.uk>
 
 	* Put out 1.05, which adds " ... " wrappers around the
